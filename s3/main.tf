@@ -3,19 +3,29 @@ variable "environment" {}
 
 resource "aws_s3_bucket" "app_bucket" {
   bucket = "app.${var.domain}"
-  acl    = "private"
+  acl    = "public-read"
 
   tags {
     Description = "Bucket to host Angular application"
+  }
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
   }
 }
 
 resource "aws_s3_bucket" "frontend_bucket" {
   bucket = "${var.domain}"
-  acl    = "private"
+  acl    = "public-read"
 
   tags {
     Description = "Bucket to host FE site for logging in"
+  }
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
   }
 }
 
@@ -34,6 +44,10 @@ resource "aws_s3_bucket" "context_resources" {
 
   tags {
     Description = "Bucket to save resources for contexts"
+  }
+
+  versioning {
+    enabled = true
   }
 }
 
