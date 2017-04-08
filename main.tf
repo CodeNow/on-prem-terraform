@@ -16,8 +16,14 @@ module "security-groups" {
 module "database" {
   source = "./database"
   environment = "${var.environment}"
-  db_username = "${var.db_username}"
-  db_password = "${var.db_password}"
-  db_port = "${var.db_port}"
-  db_subnet_group_name = "${var.db_subnet_group_name}"
+  username = "${var.db_username}"
+  password = "${var.db_password}"
+  port = "${var.db_port}"
+  subnet_group_name = "${var.db_subnet_group_name}"
+}
+
+module "instances" {
+  source = "./instances"
+  environment = "${var.environment}"
+  subnet_id = "${var.main_host_subnet_id}"
 }
