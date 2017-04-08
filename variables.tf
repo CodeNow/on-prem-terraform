@@ -67,3 +67,8 @@ variable "github_org_id" {
   description = "Github organization id for which ASG will be created"
   type = "string"
 }
+
+variable "lc_user_data_file_location" {
+  description = "Location for file generated for launch configuration. This file needs to have correct IPs, ports, and files"
+  type = "string"
+}
