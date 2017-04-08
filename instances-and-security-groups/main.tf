@@ -1,7 +1,9 @@
 variable "environment" {}
 variable "vpc_id" {}
-variable "subnet_id" {}
+variable "main_host_subnet_id" {}
+variable "dock_subnet_id" {}
 variable "private_ip" {}
+variable "github_org_id" {}
 
 resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
@@ -76,11 +78,21 @@ resource "aws_instance" "main-instance" {
   instance_type               = "t2.xlarge"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
-
-  vpc_security_group_ids = ["${aws_security_group.main_host_sg.id}"]
-  subnet_id = "${var.subnet_id}"
+  vpc_security_group_ids      = ["${aws_security_group.main_host_sg.id}"]
+  subnet_id                   = "${var.main_host_subnet_id}"
 
   tags {
     Name = "${var.environment}-main"
   }
+}
+
+resource "aws_autoscaling_group" "dock-auto-scaling-group" {
+  name                      = "asg-${var.environment}-${var.github_org_id}"
+  max_size                  = 5
+  min_size                  = 0
+  health_check_grace_period = 300
+  health_check_type         = "EC2"
+  desired_capacity          = 0 # Start off with 0 and increase manually when main host is running
+  vpc_zone_identifier       = ["${var.dock_subnet_id}"]
+  launch_configuration      = "hot-grizzly-dock-lc-0.0.14"
 }
