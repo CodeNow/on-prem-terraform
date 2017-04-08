@@ -86,6 +86,19 @@ resource "aws_instance" "main-instance" {
   }
 }
 
+resource "aws_launch_configuration" "dock_lc" {
+  name_prefix   = "${var.environment}-dock-lc-"
+  image_id      = "ami-1c5dcc7c"
+  instance_type = "t2.large"
+  user_data     = "${file("~/dock.sh")}"
+
+  ebs_block_device {
+    device_name = "docker-ebs"
+    snapshot_id = "snap-c77705e9"
+    volume_size = 30
+  }
+}
+
 resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   name                      = "asg-${var.environment}-${var.github_org_id}"
   max_size                  = 5
@@ -94,5 +107,5 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   health_check_type         = "EC2"
   desired_capacity          = 0 # Start off with 0 and increase manually when main host is running
   vpc_zone_identifier       = ["${var.dock_subnet_id}"]
-  launch_configuration      = "hot-grizzly-dock-lc-0.0.14"
+  launch_configuration      = "${aws_launch_configuration.dock_lc.name}"
 }
