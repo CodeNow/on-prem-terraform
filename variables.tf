@@ -35,6 +35,10 @@ variable "db_subnet_group_name" {
 
 # EC2 Instances
 
+variable "main_host_vpc_id" {
+  description = "VPC in which security groups and instance for main host will be created."
+}
+
 variable "main_host_subnet_id" {
-  description = "Subnet in which EC2 instances will be created"
+  description = "Subnet in which main host EC2 instance will be created. Subnet must be part of VPC in `main_host_vpc_id`"
 }

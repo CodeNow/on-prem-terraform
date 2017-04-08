@@ -1,8 +1,10 @@
 variable "environment" {}
+variable "vpc_id" {}
 
-resource "aws_security_group" "main-host-sg" {
+resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
   description = "Allow all inbound traffic on all traffic over port 80"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = 80
@@ -12,43 +14,44 @@ resource "aws_security_group" "main-host-sg" {
   }
 }
 
-resource "aws_security_group" "dock-sg" {
+resource "aws_security_group" "dock_sg" {
   name        = "${var.environment}-dock-sg"
   description = "Allow all traffic to main host and between docks"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = 32768
     to_port     = 65535
     protocol    = "tcp"
-    security_groups = ["${var.environment}-main-host-sg"]
+    security_groups = ["${aws_security_group.main_host_sg.id}"]
   }
 
   ingress {
     from_port   = 8200
     to_port     = 8201
     protocol    = "tcp"
-    security_groups = ["${var.environment}-main-host-sg"]
+    security_groups = ["${aws_security_group.main_host_sg.id}"]
   }
 
   ingress {
     from_port   = 4242
     to_port     = 4242
     protocol    = "tcp"
-    security_groups = ["${var.environment}-main-host-sg"]
+    security_groups = ["${aws_security_group.main_host_sg.id}"]
   }
 
   ingress {
     from_port   = 29006
     to_port     = 29007
     protocol    = "tcp"
-    security_groups = ["${var.environment}-main-host-sg"]
+    security_groups = ["${aws_security_group.main_host_sg.id}"]
   }
 
   ingress {
     from_port   = 3100
     to_port     = 3100
     protocol    = "tcp"
-    security_groups = ["${var.environment}-main-host-sg"]
+    security_groups = ["${aws_security_group.main_host_sg.id}"]
   }
 
   ingress {

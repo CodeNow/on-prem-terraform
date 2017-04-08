@@ -11,6 +11,7 @@ module "s3" {
 module "security-groups" {
   source      = "./security-groups"
   environment = "${var.environment}"
+  vpc_id      = "${var.main_host_vpc_id}"
 }
 
 module "database" {
