@@ -22,4 +22,5 @@ module "instances-and-security-groups" {
   environment = "${var.environment}"
   vpc_id      = "${var.main_host_vpc_id}"
   subnet_id   = "${var.main_host_subnet_id}"
+  private_ip  = "${var.main_host_private_ip}"
 }

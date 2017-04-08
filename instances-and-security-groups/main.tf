@@ -1,6 +1,7 @@
 variable "environment" {}
 variable "vpc_id" {}
 variable "subnet_id" {}
+variable "private_ip" {}
 
 resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
@@ -71,9 +72,10 @@ resource "aws_security_group" "dock_sg" {
 }
 
 resource "aws_instance" "main-instance" {
-  ami           = "ami-6426a804" # singe-host-ami-build-v0.0.1
-  instance_type = "t2.xlarge"
+  ami                         = "ami-6426a804" # singe-host-ami-build-v0.0.1
+  instance_type               = "t2.xlarge"
   associate_public_ip_address = true
+  private_ip                  = "${var.private_ip}"
 
   vpc_security_group_ids = ["${aws_security_group.main_host_sg.id}"]
   subnet_id = "${var.subnet_id}"

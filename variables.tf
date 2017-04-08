@@ -42,3 +42,7 @@ variable "main_host_vpc_id" {
 variable "main_host_subnet_id" {
   description = "Subnet in which main host EC2 instance will be created. Subnet must be part of VPC in `main_host_vpc_id`"
 }
+
+variable "main_host_private_ip" {
+  description = "Private IP address in VPC for main-host. This is important because ip address is encoded in launch configuration for docks."
+}
