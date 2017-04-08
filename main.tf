@@ -8,12 +8,6 @@ module "s3" {
   environment = "${var.environment}"
 }
 
-module "security-groups" {
-  source      = "./security-groups"
-  environment = "${var.environment}"
-  vpc_id      = "${var.main_host_vpc_id}"
-}
-
 module "database" {
   source            = "./database"
   environment       = "${var.environment}"
@@ -23,8 +17,9 @@ module "database" {
   subnet_group_name = "${var.db_subnet_group_name}"
 }
 
-module "instances" {
-  source      = "./instances"
+module "instances-and-security-groups" {
+  source      = "./instances-and-security-groups"
   environment = "${var.environment}"
+  vpc_id      = "${var.main_host_vpc_id}"
   subnet_id   = "${var.main_host_subnet_id}"
 }
