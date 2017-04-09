@@ -72,3 +72,8 @@ variable "lc_user_data_file_location" {
   description = "Location for file generated for launch configuration. This file needs to have correct IPs, ports, and files"
   type = "string"
 }
+
+variable "key_name" {
+  description = "Name of ssh key to be used for accessing all instances"
+  type = "string"
+}

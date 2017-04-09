@@ -5,6 +5,7 @@ variable "dock_subnet_id" {}
 variable "private_ip" {}
 variable "github_org_id" {}
 variable "lc_user_data_file_location" {}
+variable "key_name" {}
 
 resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
@@ -81,6 +82,7 @@ resource "aws_instance" "main-instance" {
   private_ip                  = "${var.private_ip}"
   vpc_security_group_ids      = ["${aws_security_group.main_host_sg.id}"]
   subnet_id                   = "${var.main_host_subnet_id}"
+  key_name                    = "${var.key_name}"
 
   tags {
     Name = "${var.environment}-main"
@@ -92,6 +94,7 @@ resource "aws_launch_configuration" "dock_lc" {
   image_id      = "ami-1c5dcc7c"
   instance_type = "t2.large"
   user_data     = "${file("${var.lc_user_data_file_location}")}"
+  key_name      = "${var.key_name}"
 
   ebs_block_device {
     device_name = "docker-ebs"

@@ -26,4 +26,5 @@ module "instances-and-security-groups" {
   private_ip                 = "${var.main_host_private_ip}"
   github_org_id              = "${var.github_org_id}"
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
+  key_name                   = "${var.key_name}"
 }
