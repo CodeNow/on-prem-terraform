@@ -16,6 +16,11 @@ module "database" {
   port              = "${var.db_port}"
   subnet_group_name = "${var.db_subnet_group_name}"
 }
+  
+module "security-groups" {
+  source = "./security-groups"
+  environment = "${var.environment}"
+}
 
 module "instances-and-security-groups" {
   source      = "./instances-and-security-groups"
