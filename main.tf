@@ -7,6 +7,11 @@ module "s3" {
   domain = "${var.domain}"
   environment = "${var.environment}"
 }
+  
+module "security-groups" {
+  source = "./security-groups"
+  environment = "${var.environment}"
+}
 
 module "database" {
   source = "./database"
