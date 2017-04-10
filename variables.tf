@@ -45,4 +45,5 @@ variable "main_host_subnet_id" {
 
 variable "main_host_private_ip" {
   description = "Private IP address in VPC for main-host. This is important because ip address is encoded in launch configuration for docks."
+  default     = "runnablewow.com"
 }
