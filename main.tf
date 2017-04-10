@@ -27,4 +27,5 @@ module "instances-and-security-groups" {
   github_org_id              = "${var.github_org_id}"
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
   key_name                   = "${var.key_name}"
+  bastion_sg_id              = "${var.bastion_sg_id}"
 }

@@ -6,6 +6,7 @@ variable "private_ip" {}
 variable "github_org_id" {}
 variable "lc_user_data_file_location" {}
 variable "key_name" {}
+variable "bastion_sg_id" {}
 
 resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
@@ -18,12 +19,26 @@ resource "aws_security_group" "main_host_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups = ["${var.bastion_sg_id}"]
+  }
 }
 
 resource "aws_security_group" "dock_sg" {
   name        = "${var.environment}-dock-sg"
   description = "Allow all traffic to main host and between docks"
   vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups = ["${var.bastion_sg_id}"]
+  }
 
   ingress {
     from_port   = 32768

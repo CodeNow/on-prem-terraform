@@ -52,6 +52,11 @@ variable "main_host_subnet_id" {
   type = "string"
 }
 
+variable "bastion_sg_id" {
+  description = "Security group id for bastion instance"
+  type = "string"
+}
+
 variable "main_host_private_ip" {
   description = "Private IP address in VPC for main-host. This is important because ip address is encoded in launch configuration for docks."
   default     = "10.4.0.100"
