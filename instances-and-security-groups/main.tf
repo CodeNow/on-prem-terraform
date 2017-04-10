@@ -107,7 +107,7 @@ resource "aws_instance" "main-instance" {
 resource "aws_launch_configuration" "dock_lc" {
   name_prefix   = "${var.environment}-dock-lc-"
   image_id      = "ami-1c5dcc7c"
-  instance_type = "t2.large"
+  instance_type = "m4.large"
   user_data     = "${file("${var.lc_user_data_file_location}")}"
   key_name      = "${var.key_name}"
 
@@ -120,7 +120,7 @@ resource "aws_launch_configuration" "dock_lc" {
 
 resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   name                      = "asg-${var.environment}-${var.github_org_id}"
-  max_size                  = 5
+  max_size                  = 30
   min_size                  = 0
   health_check_grace_period = 300
   health_check_type         = "EC2"
