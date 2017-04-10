@@ -3,21 +3,24 @@ provider "aws" {
 }
 
 module "s3" {
-  source = "./s3"
-  domain = "${var.domain}"
-  environment = "${var.environment}"
-}
-  
-module "security-groups" {
-  source = "./security-groups"
+  source      = "./s3"
+  domain      = "${var.domain}"
   environment = "${var.environment}"
 }
 
 module "database" {
-  source = "./database"
+  source            = "./database"
+  environment       = "${var.environment}"
+  username          = "${var.db_username}"
+  password          = "${var.db_password}"
+  port              = "${var.db_port}"
+  subnet_group_name = "${var.db_subnet_group_name}"
+}
+
+module "instances-and-security-groups" {
+  source      = "./instances-and-security-groups"
   environment = "${var.environment}"
-  db_username = "${var.db_username}"
-  db_password = "${var.db_password}"
-  db_port = "${var.db_port}"
-  db_subnet_group_name = "${var.db_subnet_group_name}"
+  vpc_id      = "${var.main_host_vpc_id}"
+  subnet_id   = "${var.main_host_subnet_id}"
+  private_ip  = "${var.main_host_private_ip}"
 }
