@@ -14,4 +14,5 @@ resource "aws_db_instance" "main_postgres_db" {
   password             = "${var.password}"
   port                 = "${var.port}"
   db_subnet_group_name = "${var.subnet_group_name}"
+  skip_final_snapshot  = true
 }
