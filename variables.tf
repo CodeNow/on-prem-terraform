@@ -9,7 +9,7 @@ variable "aws_region" {
 variable "environment" {
   description = "Name given to the enviroment in which Runnable is being deployed. This can be any name. It is used in multiple places to name resources."
   default     = "runnable-on-prem"
-  type = "string"
+  type = "string"r
 }
 
 variable "domain" {
