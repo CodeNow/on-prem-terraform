@@ -18,9 +18,14 @@ module "database" {
 }
 
 module "instances-and-security-groups" {
-  source      = "./instances-and-security-groups"
-  environment = "${var.environment}"
-  vpc_id      = "${var.main_host_vpc_id}"
-  subnet_id   = "${var.main_host_subnet_id}"
-  private_ip  = "${var.main_host_private_ip}"
+  source                     = "./instances-and-security-groups"
+  environment                = "${var.environment}"
+  vpc_id                     = "${var.main_host_vpc_id}"
+  main_host_subnet_id        = "${var.main_host_subnet_id}"
+  dock_subnet_id             = "${var.dock_subnet_id}"
+  private_ip                 = "${var.main_host_private_ip}"
+  github_org_id              = "${var.github_org_id}"
+  lc_user_data_file_location = "${var.lc_user_data_file_location}"
+  key_name                   = "${var.key_name}"
+  bastion_sg_id              = "${var.bastion_sg_id}"
 }
