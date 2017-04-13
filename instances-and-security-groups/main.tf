@@ -10,6 +10,16 @@ variable "lc_user_data_file_location" {}
 variable "key_name" {}
 variable "bastion_sg_id" {}
 
+# Changing AMI forces new resource and will delete all everything in main host
+# Ovewrite this variable with previous AMI if update is pushed
+variable "main_host_ami" {
+  default = "ami-2c7eee4c" # singe-host-ami-build-v0.0.3
+}
+
+variable "dock_ami" {
+  default = "ami-1c5dcc7c"
+}
+
 resource "aws_security_group" "main_host_sg" {
   name        = "${var.environment}-main-host-sg"
   description = "Allow all inbound traffic on all traffic over port 80"
@@ -93,7 +103,7 @@ resource "aws_security_group" "dock_sg" {
 }
 
 resource "aws_instance" "main-instance" {
-  ami                         = "ami-2c7eee4c" # singe-host-ami-build-v0.0.3
+  ami                         = "${var.ami-1c5dcc7c}"
   instance_type               = "${var.main_host_instance_type}"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
@@ -108,7 +118,7 @@ resource "aws_instance" "main-instance" {
 
 resource "aws_launch_configuration" "dock_lc" {
   name_prefix   = "${var.environment}-dock-lc-"
-  image_id      = "ami-1c5dcc7c"
+  image_id      = "${var.dock_ami}"
   instance_type = "${var.dock_instance_type}"
   user_data     = "${file("${var.lc_user_data_file_location}")}"
   key_name      = "${var.key_name}"
