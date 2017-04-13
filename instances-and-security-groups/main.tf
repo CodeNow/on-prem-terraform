@@ -91,7 +91,7 @@ resource "aws_security_group" "dock_sg" {
 }
 
 resource "aws_instance" "main-instance" {
-  ami                         = "ami-6426a804" # singe-host-ami-build-v0.0.1
+  ami                         = "ami-2c7eee4c" # singe-host-ami-build-v0.0.3
   instance_type               = "t2.xlarge"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
@@ -116,6 +116,10 @@ resource "aws_launch_configuration" "dock_lc" {
     snapshot_id = "snap-c77705e9"
     volume_size = 30
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_autoscaling_group" "dock-auto-scaling-group" {
@@ -127,4 +131,8 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   desired_capacity          = 0 # Start off with 0 and increase manually when main host is running
   vpc_zone_identifier       = ["${var.dock_subnet_id}"]
   launch_configuration      = "${aws_launch_configuration.dock_lc.name}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
