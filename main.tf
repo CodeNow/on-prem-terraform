@@ -32,5 +32,5 @@ module "database" {
   subnet_group_name           = "${var.db_subnet_group_name}"
   main_host_security_group_id = "${module.instances-and-security-groups.main_security_group_id}"
   vpc_id                      = "${var.main_host_vpc_id}"
-  instance_class             = "${var.db_instance_class}"
+  instance_class              = "${var.db_instance_class}"
 }
