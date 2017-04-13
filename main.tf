@@ -8,15 +8,6 @@ module "s3" {
   environment = "${var.environment}"
 }
 
-module "database" {
-  source            = "./database"
-  environment       = "${var.environment}"
-  username          = "${var.db_username}"
-  password          = "${var.db_password}"
-  port              = "${var.db_port}"
-  subnet_group_name = "${var.db_subnet_group_name}"
-}
-
 module "instances-and-security-groups" {
   source                     = "./instances-and-security-groups"
   environment                = "${var.environment}"
@@ -28,4 +19,15 @@ module "instances-and-security-groups" {
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
   key_name                   = "${var.key_name}"
   bastion_sg_id              = "${var.bastion_sg_id}"
+}
+
+module "database" {
+  source                      = "./database"
+  environment                 = "${var.environment}"
+  username                    = "${var.db_username}"
+  password                    = "${var.db_password}"
+  port                        = "${var.db_port}"
+  subnet_group_name           = "${var.db_subnet_group_name}"
+  main_host_security_group_id = "${module.instances-and-security-groups.main_security_group_id}"
+  vpc_id                      = "${var.main_host_vpc_id}"
 }

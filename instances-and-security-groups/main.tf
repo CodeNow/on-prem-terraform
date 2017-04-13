@@ -30,7 +30,7 @@ resource "aws_security_group" "main_host_sg" {
 
 resource "aws_security_group" "dock_sg" {
   name        = "${var.environment}-dock-sg"
-  description = "Allow all traffic to main host and between docks"
+  description = "Allow all traffic from main host and between docks"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -135,4 +135,8 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+output "main_security_group_id" {
+  value = "${aws_security_group.main_host_sg.id}"
 }
