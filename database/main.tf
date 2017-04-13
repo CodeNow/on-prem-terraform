@@ -5,6 +5,7 @@ variable "port" {}
 variable "subnet_group_name" {}
 variable "vpc_id" {}
 variable "main_host_security_group_id" {}
+variable "instance_class" {}
 
 resource "aws_security_group" "database_sg" {
   name        = "${var.environment}-database-sg"
@@ -23,7 +24,7 @@ resource "aws_db_instance" "main_postgres_db" {
   allocated_storage      = 10
   engine                 = "postgres"
   engine_version         = "9.5.2"
-  instance_class         = "db.t2.small"
+  instance_class         = "${var.instance_class}"
   name                   = "big_poppa"
   username               = "${var.username}"
   password               = "${var.password}"

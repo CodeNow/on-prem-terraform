@@ -1,7 +1,9 @@
 variable "environment" {}
 variable "vpc_id" {}
 variable "main_host_subnet_id" {}
+variable "main_host_instance_type" {}
 variable "dock_subnet_id" {}
+variable "dock_instance_type" {}
 variable "private_ip" {}
 variable "github_org_id" {}
 variable "lc_user_data_file_location" {}
@@ -92,7 +94,7 @@ resource "aws_security_group" "dock_sg" {
 
 resource "aws_instance" "main-instance" {
   ami                         = "ami-2c7eee4c" # singe-host-ami-build-v0.0.3
-  instance_type               = "t2.xlarge"
+  instance_type               = "${var.main_host_instance_type}"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
   vpc_security_group_ids      = ["${aws_security_group.main_host_sg.id}"]
@@ -107,7 +109,7 @@ resource "aws_instance" "main-instance" {
 resource "aws_launch_configuration" "dock_lc" {
   name_prefix   = "${var.environment}-dock-lc-"
   image_id      = "ami-1c5dcc7c"
-  instance_type = "m4.large"
+  instance_type = "${var.dock_instance_type}"
   user_data     = "${file("${var.lc_user_data_file_location}")}"
   key_name      = "${var.key_name}"
 
