@@ -103,7 +103,7 @@ resource "aws_security_group" "dock_sg" {
 }
 
 resource "aws_instance" "main-instance" {
-  ami                         = "${var.ami-1c5dcc7c}"
+  ami                         = "${var.main_host_ami}"
   instance_type               = "${var.main_host_instance_type}"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
