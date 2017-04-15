@@ -40,6 +40,12 @@ variable "db_subnet_group_name" {
   type        = "string"
 }
 
+variable "db_instance_class" {
+  description = "Type of instance that will be used for database"
+  type        = "string"
+  default     = "db.t2.small"
+}
+
 # EC2 Instances
 
 variable "main_host_vpc_id" {
@@ -63,9 +69,21 @@ variable "main_host_private_ip" {
   type        = "string"
 }
 
+variable "main_host_instance_type" {
+  description = "Type of instance that will be used for the main host"
+  type        = "string"
+  default     = "m4.2xlarge"
+}
+
 variable "dock_subnet_id" {
   description = "Subnet in which dock EC2 instance will be created. Subnet must be part of VPC in `main_host_vpc_id`"
   type        = "string"
+}
+
+variable "dock_instance_type" {
+  description = "Type of instance that will be used for all docks"
+  type        = "string"
+  default     = "m4.large"
 }
 
 variable "github_org_id" {

@@ -68,3 +68,12 @@ resource "aws_s3_bucket" "container_logs" {
     Description = "Bucket to save container logs"
   }
 }
+
+resource "aws_s3_bucket" "registry" {
+  bucket = "runnableimages.${var.environment}"
+  acl    = "private"
+
+  tags {
+    Description = "Bucket to service as the registry backend"
+  }
+}
