@@ -38,6 +38,13 @@ resource "aws_security_group" "main_host_sg" {
     protocol    = "tcp"
     security_groups = ["${var.bastion_sg_id}"]
   }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "dock_sg" {
@@ -100,6 +107,13 @@ resource "aws_security_group" "dock_sg" {
     protocol    = "udp"
     self        = true
   }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_instance" "main-instance" {
@@ -122,7 +136,7 @@ resource "aws_launch_configuration" "dock_lc" {
   instance_type   = "${var.dock_instance_type}"
   user_data       = "${file("${var.lc_user_data_file_location}")}"
   key_name        = "${var.key_name}"
-  security_groups = ["${aws_security_group.main_host_sg.id}"]
+  security_groups = ["${aws_security_group.dock_sg.id}"]
 
   root_block_device {
     volume_size = 10
