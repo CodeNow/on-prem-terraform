@@ -13,7 +13,7 @@ variable "bastion_sg_id" {}
 # Changing AMI forces new resource and will delete all everything in main host
 # Ovewrite this variable with previous AMI if update is pushed
 variable "main_host_ami" {
-  default = "ami-2c7eee4c" # singe-host-ami-build-v0.0.3
+  default = "ami-5fa7353f" # singe-host-ami-build-v0.0.4
 }
 
 variable "dock_ami" {
