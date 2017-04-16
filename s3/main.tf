@@ -1,9 +1,11 @@
 variable "domain" {}
 variable "environment" {}
+variable "force_destroy" {}
 
 resource "aws_s3_bucket" "app_bucket" {
-  bucket = "app.${var.domain}"
-  acl    = "public-read"
+  bucket        = "app.${var.domain}"
+  acl           = "public-read"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to host Angular application"
@@ -16,8 +18,9 @@ resource "aws_s3_bucket" "app_bucket" {
 }
 
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = "${var.domain}"
-  acl    = "public-read"
+  bucket        = "${var.domain}"
+  acl           = "public-read"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to host FE site for logging in"
@@ -30,8 +33,9 @@ resource "aws_s3_bucket" "frontend_bucket" {
 }
 
 resource "aws_s3_bucket" "runnable_vault" {
-  bucket = "runnable.vault.${var.environment}"
-  acl    = "private"
+  bucket        = "runnable.vault.${var.environment}"
+  acl           = "private"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to server as a backend for vault"
@@ -39,8 +43,9 @@ resource "aws_s3_bucket" "runnable_vault" {
 }
 
 resource "aws_s3_bucket" "context_resources" {
-  bucket = "runnable.context.resources.${var.environment}"
-  acl    = "private"
+  bucket        = "runnable.context.resources.${var.environment}"
+  acl           = "private"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to save resources for contexts"
@@ -52,8 +57,9 @@ resource "aws_s3_bucket" "context_resources" {
 }
 
 resource "aws_s3_bucket" "deploy_keys" {
-  bucket = "runnable.deploykeys.${var.environment}"
-  acl    = "private"
+  bucket        = "runnable.deploykeys.${var.environment}"
+  acl           = "private"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to Github deploy keys"
@@ -61,8 +67,9 @@ resource "aws_s3_bucket" "deploy_keys" {
 }
 
 resource "aws_s3_bucket" "container_logs" {
-  bucket = "${var.environment}.container-logs"
-  acl    = "private"
+  bucket        = "${var.environment}.container-logs"
+  acl           = "private"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to save container logs"
@@ -70,8 +77,9 @@ resource "aws_s3_bucket" "container_logs" {
 }
 
 resource "aws_s3_bucket" "registry" {
-  bucket = "runnableimages.${var.environment}"
-  acl    = "private"
+  bucket        = "runnableimages.${var.environment}"
+  acl           = "private"
+  force_destroy = "${var.force_destroy}"
 
   tags {
     Description = "Bucket to service as the registry backend"

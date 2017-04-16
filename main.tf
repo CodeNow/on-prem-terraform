@@ -3,9 +3,10 @@ provider "aws" {
 }
 
 module "s3" {
-  source      = "./s3"
-  domain      = "${var.domain}"
-  environment = "${var.environment}"
+  source        = "./s3"
+  domain        = "${var.domain}"
+  environment   = "${var.environment}"
+  force_destroy = "${var.force_destroy_s3_buckets}"
 }
 
 module "instances-and-security-groups" {
