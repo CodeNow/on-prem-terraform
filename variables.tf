@@ -1,9 +1,10 @@
 # General
 
+
 variable "aws_region" {
   description = "AWS region to launch servers."
   default     = "us-west-2"
-  type = "string"
+  type        = "string"
 }
 
 variable "environment" {
@@ -15,6 +16,14 @@ variable "environment" {
 variable "domain" {
   description = "Main domain for your Runnable installation. You should already own this domain and have certs for it."
   type        = "string"
+}
+
+# S3 Buckets
+
+variable "force_destroy_s3_buckets" {
+  description = "Forces destroy of S3 buckets and deletes all their content. Default to false. Use this only when tearing down an environment. Before running `terraform destroy`, `terraform apply` must be run to updates buckets."
+  type        = "string"
+  default     = "false" # https://www.terraform.io/docs/configuration/variables.html#booleans
 }
 
 # Databases
