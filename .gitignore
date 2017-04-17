@@ -6,4 +6,6 @@
 .terraform/
 
 # Secrets
-environments
+environments/*
+!environments/runnable-on-prem.example.tfvars
+
