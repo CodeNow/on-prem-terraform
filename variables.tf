@@ -51,11 +51,6 @@ variable "db_port" {
   type        = "string"
 }
 
-variable "db_subnet_group_name" {
-  description = "Subnet in which database will be created"
-  type        = "string"
-}
-
 variable "db_instance_class" {
   description = "Type of instance that will be used for database"
   type        = "string"
@@ -63,21 +58,6 @@ variable "db_instance_class" {
 }
 
 # EC2 Instances
-
-variable "main_host_vpc_id" {
-  description = "VPC in which security groups and instance for main host will be created."
-  type        = "string"
-}
-
-variable "main_host_subnet_id" {
-  description = "Subnet in which main host EC2 instance will be created. Subnet must be part of VPC in `main_host_vpc_id`"
-  type        = "string"
-}
-
-variable "bastion_sg_id" {
-  description = "Security group id for bastion instance"
-  type        = "string"
-}
 
 variable "main_host_private_ip" {
   description = "Private IP address in VPC for main-host. This is important because ip address is encoded in launch configuration for docks."
@@ -89,11 +69,6 @@ variable "main_host_instance_type" {
   description = "Type of instance that will be used for the main host"
   type        = "string"
   default     = "m4.2xlarge"
-}
-
-variable "dock_subnet_id" {
-  description = "Subnet in which dock EC2 instance will be created. Subnet must be part of VPC in `main_host_vpc_id`"
-  type        = "string"
 }
 
 variable "dock_instance_type" {
@@ -109,10 +84,5 @@ variable "github_org_id" {
 
 variable "lc_user_data_file_location" {
   description = "Location for file generated for launch configuration. This file needs to have correct IPs, ports, and files"
-  type = "string"
-}
-
-variable "key_name" {
-  description = "Name of ssh key to be used for accessing all instances"
   type = "string"
 }
