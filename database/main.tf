@@ -3,8 +3,7 @@ variable "username" {}
 variable "password" {}
 variable "port" {}
 variable "subnet_group_name" {}
-variable "vpc_id" {}
-variable "main_host_security_group_id" {}
+variable "security_group_id" {}
 variable "instance_class" {}
 
 resource "aws_db_instance" "main_postgres_db" {
@@ -17,6 +16,6 @@ resource "aws_db_instance" "main_postgres_db" {
   password               = "${var.password}"
   port                   = "${var.port}"
   db_subnet_group_name   = "${var.subnet_group_name}"
-  vpc_security_group_ids = ["${aws_security_group.database_sg.id}"]
+  vpc_security_group_ids = ["${var.security_group_id}"]
   skip_final_snapshot    = true
 }

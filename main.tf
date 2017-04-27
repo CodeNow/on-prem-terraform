@@ -60,13 +60,12 @@ module "instances" {
 }
 
 module "database" {
-  source                      = "./database"
-  environment                 = "${var.environment}"
-  username                    = "${var.db_username}"
-  password                    = "${var.db_password}"
-  port                        = "${var.db_port}"
-  subnet_group_name           = "${module.subnets.database_subnet_group_name}"
-  main_host_security_group_id = "${module.security_groups.main_security_group_id}"
-  vpc_id                      = "${module.vpc.main_vpc_id}"
-  instance_class              = "${var.db_instance_class}"
+  source            = "./database"
+  environment       = "${var.environment}"
+  username          = "${var.db_username}"
+  password          = "${var.db_password}"
+  port              = "${var.db_port}"
+  subnet_group_name = "${module.subnets.database_subnet_group_name}"
+  security_group_id = "${module.security_groups.db_sg_id}"
+  instance_class    = "${var.db_instance_class}"
 }
