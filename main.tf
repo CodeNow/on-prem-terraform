@@ -2,6 +2,16 @@ provider "aws" {
   region     = "${var.aws_region}"
 }
 
+module "vpc-and-subnets" {
+  source        = "./vpc-and-subnets"
+  environment   = "${var.environment}"
+  public_key    = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIf2LaAVw5wnc877az6Z4RdgAoRpJSJT+G7KHw+2Rv888PIf9vfTbIf/3uT8wRbhwt8jau3f2rK7AhFIQo4rLYhBYWQ+dUvNKyjpNc5ZZE7jwmtD2JLPI2aPi1ocAmFwIf5l6Gzaxkkko9iFP7hZD8dvHX00+n2m6/RvHUnbC62I1vd7JvGuYVJlhtkRpeEW0f42//l0q+UbIDw/eEs72w2YrO8VUhCE/0kvoZ8dyoz3CxeJqepgihgsOsNehq8YW93COR+Ywh3sRqv009GOuLJC02xtek6dyQwLG2L1pQJTyuvDCSsleB8kp9S9yDLu1Xlwjd/HQS3zqWREJ/ENDb"
+}
+
+module "security-groups" {
+  source        = "./vpc-and-subnets"
+}
+
 module "s3" {
   source        = "./s3"
   domain        = "${var.domain}"
