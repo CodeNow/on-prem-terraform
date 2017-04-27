@@ -47,16 +47,16 @@ module "bastion" {
 module "instances" {
   source                     = "./instances"
   environment                = "${var.environment}"
-  vpc_id                     = "${module.vpc.main_vpc_id}"
   main_host_subnet_id        = "${module.subnets.main_subnet_id}"
   dock_subnet_id             = "${module.subnets.dock_subnet_id}"
   private_ip                 = "${var.main_host_private_ip}"
   github_org_id              = "${var.github_org_id}"
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
   key_name                   = "${module.key_pair.key_pair_name}"
-  bastion_sg_id              = "${module.subnets.bastion_sg_id}"
   main_host_instance_type    = "${var.main_host_instance_type}"
   dock_instance_type         = "${var.dock_instance_type}"
+  main_sg_id                 = "${module.security_groups.main_sg_id}"
+  dock_sg_id                 = "${module.security_groups.dock_sg_id}"
 }
 
 module "database" {

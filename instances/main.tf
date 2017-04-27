@@ -1,5 +1,4 @@
 variable "environment" {}
-variable "vpc_id" {}
 variable "main_host_subnet_id" {}
 variable "main_host_instance_type" {}
 variable "dock_subnet_id" {}
@@ -8,7 +7,8 @@ variable "private_ip" {}
 variable "github_org_id" {}
 variable "lc_user_data_file_location" {}
 variable "key_name" {}
-variable "bastion_sg_id" {}
+variable "main_sg_id" {}
+variable "dock_sg_id" {}
 
 # Changing AMI forces new resource and will delete all everything in main host
 # Ovewrite this variable with previous AMI if update is pushed
@@ -20,12 +20,12 @@ variable "dock_ami" {
   default = "ami-557dee35" # dock-ami-build-v.0.0.8
 }
 
-resource "aws_instance" "main-instance" {
+resource "aws_instance" "main_instance" {
   ami                         = "${var.main_host_ami}"
   instance_type               = "${var.main_host_instance_type}"
   associate_public_ip_address = true
   private_ip                  = "${var.private_ip}"
-  vpc_security_group_ids      = ["${aws_security_group.main_host_sg.id}"]
+  vpc_security_group_ids      = ["${var.main_sg_id}"]
   subnet_id                   = "${var.main_host_subnet_id}"
   key_name                    = "${var.key_name}"
 
@@ -40,7 +40,7 @@ resource "aws_launch_configuration" "dock_lc" {
   instance_type   = "${var.dock_instance_type}"
   user_data       = "${file("${var.lc_user_data_file_location}")}"
   key_name        = "${var.key_name}"
-  security_groups = ["${aws_security_group.dock_sg.id}"]
+  security_groups = ["${var.dock_sg_id}"]
 
   root_block_device {
     volume_size = 10
@@ -57,7 +57,7 @@ resource "aws_launch_configuration" "dock_lc" {
   }
 }
 
-resource "aws_autoscaling_group" "dock-auto-scaling-group" {
+resource "aws_autoscaling_group" "dock_auto_scaling_group" {
   name                      = "asg-${var.environment}-${var.github_org_id}"
   max_size                  = 30
   min_size                  = 2
@@ -82,8 +82,4 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
     value               = "${var.environment}"
     propagate_at_launch = true
   }
-}
-
-output "main_security_group_id" {
-  value = "${aws_security_group.main_host_sg.id}"
 }
