@@ -20,12 +20,14 @@ module "vpc" {
 }
 
 module "subnets" {
+  # TODO: Add subnet for bastion?
   source      = "./subnets"
   environment = "${var.environment}"
   vpc_id      = "${module.vpc.main_vpc_id}"
 }
 
 module "security_groups" {
+  # TODO: Add sg for bastion
   source      = "./security-groups"
   environment = "${var.environment}"
   vpc_id      = "${module.vpc.main_vpc_id}"
@@ -38,10 +40,16 @@ module "s3" {
   force_destroy = "${var.force_destroy_s3_buckets}"
 }
 
+# NOTE: This should all work expect for bastion
 module "bastion" {
-  source      = "./bastion"
-  environment = "${var.environment}"
-  vpc_id      = "${module.vpc.main_vpc_id}"
+  source        = "./bastion"
+  environment   = "${var.environment}"
+  vpc_id        = "${module.vpc.main_vpc_id}"
+  sg_id         = "${module.security_groups.bastion_sg_id}"
+  ami           = "" # TODO: get ami
+  subnet        = "" # TODO: should this be diff than main subnet?
+  instance_type = "" # TODO: should be small
+  key_name      = "${module.key_pair.key_pair_name}"
 }
 
 module "instances" {
