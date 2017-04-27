@@ -18,12 +18,19 @@ variable "domain" {
   type        = "string"
 }
 
+# Key Pair
+
+variable "public_key" {
+  description = "Public key for key which will be used for sshing into instances through bastion"
+  type        = "string"
+}
+
 # S3 Buckets
 
 variable "force_destroy_s3_buckets" {
   description = "Forces destroy of S3 buckets and deletes all their content. Default to false. Use this only when tearing down an environment. Before running `terraform destroy`, `terraform apply` must be run to updates buckets."
   type        = "string"
-  default     = "false" # https://www.terraform.io/docs/configuration/variables.html#booleans
+  default     = "true" # https://www.terraform.io/docs/configuration/variables.html#booleans
 }
 
 # Databases
