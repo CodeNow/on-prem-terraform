@@ -4,6 +4,7 @@ variable "subnet_id" {}
 variable "instance_type" {}
 variable "key_name" {}
 variable "sg_id" {}
+variable "vpc_id" {}
 
 resource "aws_instance" "bastion_instance" {
   ami                         = "${var.ami}"
