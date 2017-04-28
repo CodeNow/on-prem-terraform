@@ -41,6 +41,7 @@ module "s3" {
 }
 
 # NOTE: This should all work expect for bastion
+/*
 module "bastion" {
   source        = "./bastion"
   environment   = "${var.environment}"
@@ -50,7 +51,7 @@ module "bastion" {
   subnet        = "" # TODO: should this be diff than main subnet?
   instance_type = "" # TODO: should be small
   key_name      = "${module.key_pair.key_pair_name}"
-}
+}*/
 
 module "instances" {
   source                     = "./instances"

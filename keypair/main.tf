@@ -1,5 +1,5 @@
 variable "public_key" {}
-variable "enviroment" {}
+variable "environment" {}
 
 resource "aws_key_pair" "main_key" {
   key_name = "${var.environment}-key-pair"

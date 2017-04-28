@@ -1,33 +1,35 @@
 variable "environment" {}
+variable "vpc_id" {}
 
 resource "aws_subnet" "main_subnet" {
-  vpc_id                  = "${aws_vpc.main.id}"
+  vpc_id                  = "${var.vpc_id}"
   cidr_block              = "10.10.1.0/24"
   map_public_ip_on_launch = true
 
   tags {
     Name       = "${var.environment}-main-subnet"
-    Enviroment = "${var.environment}"
+    Environment = "${var.environment}"
   }
 }
 
 resource "aws_subnet" "dock_subnet" {
-  vpc_id     = "${aws_vpc.main.id}"
+  vpc_id     = "${var.vpc_id}"
   cidr_block = "10.10.2.0/24"
 
   tags {
     Name       = "${var.environment}-dock-subnet"
-    Enviroment = "${var.environment}"
+    Environment = "${var.environment}"
   }
 }
 
 resource "aws_db_subnet_group" "database_subnet_group" {
-  name       = "${var.enviroment}-database-subnet-group"
-  subnet_ids = ["${aws_subnet.main-subnet"]
+  name       = "${var.environment}-database-subnet-group"
+  # NOTE: What subnets should this have?
+  subnet_ids = ["${aws_subnet.main_subnet.id}", "${aws_subnet.dock_subnet.id}"]
 
   tags {
-    Name       = "${var.enviroment}-database-subnet-group"
-    Enviroment = "${var.enviroment}"
+    Name       = "${var.environment}-database-subnet-group"
+    Environment = "${var.environment}"
   }
 }
 
@@ -40,5 +42,5 @@ output "dock_subnet_id" {
 }
 
 output "database_subnet_group_name" {
-  value = "${aws_subnet.database_subnet_group.name}"
+  value = "${aws_db_subnet_group.database_subnet_group.name}"
 }
