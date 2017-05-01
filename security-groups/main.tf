@@ -6,7 +6,20 @@ resource "aws_security_group" "bastion_sg" {
   description = "Allow ssh access through this box"
   vpc_id      = "${var.vpc_id}"
 
-  # TODO: Set ingress/egress
+  ingress = {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    self = false
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "main_host_sg" {
