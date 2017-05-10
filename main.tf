@@ -14,7 +14,6 @@ module "vpc" {
 }
 
 module "subnets" {
-  # TODO: Add subnet for bastion?
   source                = "./subnets"
   environment           = "${var.environment}"
   region                = "${var.aws_region}"
@@ -28,14 +27,13 @@ module "security_groups" {
   vpc_id      = "${module.vpc.main_vpc_id}"
 }
 
-/*module "s3" {
+module "s3" {
   source        = "./s3"
   domain        = "${var.domain}"
   environment   = "${var.environment}"
   force_destroy = "${var.force_destroy_s3_buckets}"
-}*/
+}
 
-# NOTE: This should all work expect for bastion
 module "bastion" {
   source        = "./bastion"
   environment   = "${var.environment}"
@@ -44,7 +42,6 @@ module "bastion" {
   key_name      = "${module.key_pair.key_pair_name}"
 }
 
-/*
 module "instances" {
   source                     = "./instances"
   environment                = "${var.environment}"
@@ -58,9 +55,9 @@ module "instances" {
   dock_instance_type         = "${var.dock_instance_type}"
   main_sg_id                 = "${module.security_groups.main_sg_id}"
   dock_sg_id                 = "${module.security_groups.dock_sg_id}"
-}*/
+}
 
-/*module "database" {
+module "database" {
   source            = "./database"
   environment       = "${var.environment}"
   username          = "${var.db_username}"
@@ -69,7 +66,7 @@ module "instances" {
   subnet_group_name = "${module.subnets.database_subnet_group_name}"
   security_group_id = "${module.security_groups.db_sg_id}"
   instance_class    = "${var.db_instance_class}"
-}*/
+}
 
 output "environment" {
   value = "${var.environment}"
@@ -79,8 +76,12 @@ output "vpc_id" {
   value = "${module.vpc.main_vpc_id}"
 }
 
-output "public_route_table_id" {
-  value = "${module.vpc.public_route_table_id}"
+output "main_host_subnet_id" {
+  value = "${module.subnets.main_subnet_id}"
+}
+
+output "dock_subnet_id" {
+  value = "${module.subnets.dock_subnet_id}"
 }
 
 output "database_subnet_group_name" {
@@ -89,4 +90,20 @@ output "database_subnet_group_name" {
 
 output "key_pair_name" {
   value = "${module.key_pair.key_pair_name}"
+}
+
+output "aws_region" {
+  value = "${var.aws_region}"
+}
+
+output "postgres_user" {
+  value = "${var.db_username}"
+}
+
+output "postgres_password" {
+  value = "${var.db_password}"
+}
+
+output "main_host_private_ip" {
+  value = "${var.main_host_private_ip}"
 }
