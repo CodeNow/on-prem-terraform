@@ -60,7 +60,7 @@ variable "db_instance_class" {
 
 variable "main_host_private_ip" {
   description = "Private IP address in VPC for main-host. This is important because ip address is encoded in launch configuration for docks."
-  default     = "10.4.0.100"
+  default     = "10.10.1.100"
   type        = "string"
 }
 
