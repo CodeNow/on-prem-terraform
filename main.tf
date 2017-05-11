@@ -9,9 +9,9 @@ provider "aws" {
 }
 
 module "key_pair" {
-  source        = "./keypair"
-  environment   = "${var.environment}"
-  public_key    = "${var.public_key}"
+  source          = "./keypair"
+  environment     = "${var.environment}"
+  public_key_path = "${var.public_key_path}"
 }
 
 module "vpc" {

@@ -19,8 +19,8 @@ variable "domain" {
 
 # Key Pair
 
-variable "public_key" {
-  description = "Public key for key which will be used for sshing into instances through bastion"
+variable "public_key_path" {
+  description = "Path to public key for key which will be used for sshing into instances through bastion"
   type        = "string"
 }
 
