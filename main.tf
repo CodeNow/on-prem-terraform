@@ -33,6 +33,13 @@ module "security_groups" {
   vpc_id      = "${module.vpc.main_vpc_id}"
 }
 
+module "route53" {
+  source      = "./route53"
+  domain        = "${var.domain}"
+  environment   = "${var.environment}"
+  force_destroy = "${var.force_destroy_s3_buckets}"
+}
+
 module "s3" {
   source        = "./s3"
   domain        = "${var.domain}"
@@ -108,6 +115,10 @@ output "postgres_user" {
 
 output "postgres_password" {
   value = "${var.db_password}"
+}
+
+output "dns_nameservers" {
+  value = "${module.route53.nameservers[0]}"
 }
 
 output "main_host_private_ip" {
