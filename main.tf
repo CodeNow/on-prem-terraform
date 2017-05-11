@@ -124,3 +124,15 @@ output "dns_nameservers" {
 output "main_host_private_ip" {
   value = "${var.main_host_private_ip}"
 }
+
+output "kops_config_bucket" {
+ value = "${module.s3.kops_config_bucket}"
+}
+
+output "cluster_name" {
+ value = "${module.route53.cluster_name}"
+}
+
+output "ssh_public_key_path" {
+  value = "${var.public_key_path}"
+}

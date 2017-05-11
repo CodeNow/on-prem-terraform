@@ -33,3 +33,7 @@ output "nameservers" {
     "${aws_route53_zone.main.name_servers.3}",
   ]
 }
+
+output "cluster_name" {
+  value = "${aws_route53_zone.main.name}"
+}
