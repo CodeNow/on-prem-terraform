@@ -118,7 +118,7 @@ output "postgres_password" {
 }
 
 output "dns_nameservers" {
-  value = "${module.route53.nameservers[0]}"
+  value = "${module.route53.nameservers}"
 }
 
 output "main_host_private_ip" {
