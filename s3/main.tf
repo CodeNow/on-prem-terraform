@@ -85,3 +85,20 @@ resource "aws_s3_bucket" "registry" {
     Description = "Bucket to service as the registry backend"
   }
 }
+
+resource "aws_s3_bucket" "kops_config" {
+  bucket        = "runnable.kops-config.${var.environment}"
+  force_destroy = "${var.force_destroy}"
+
+  tags {
+    Description = "Bucket to store kops configuration"
+  }
+
+versioning {
+    enabled = true
+  }
+}
+
+output "kops_config_bucket" {
+  value = "${aws_s3_bucket.kops_config.bucket}"
+}
