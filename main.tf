@@ -8,75 +8,56 @@ provider "aws" {
   region     = "${var.aws_region}"
 }
 
-module "key_pair" {
-  source          = "./keypair"
-  environment     = "${var.environment}"
-  public_key_path = "${var.public_key_path}"
+module "step_1" {
+  source                   = "./step-1"
+  environment              = "${var.environment}"
+  public_key_path          = "${var.public_key_path}"
+  aws_region               = "${var.aws_region}"
+  domain                   = "${var.domain}"
+  force_destroy_s3_buckets = "${var.force_destroy_s3_buckets}"
+  db_username              = "${var.db_username}"
+  db_password              = "${var.db_password}"
+  db_port                  = "${var.db_port}"
 }
 
-module "vpc" {
-  source        = "./vpc"
-  environment   = "${var.environment}"
+# Has unfortunate problem of not allowing variables
+# Can variables be over
+module "step_2_kops" {
+  source = "./step-2-kops/"
+  name   = "kubernetes"
 }
 
-module "subnets" {
-  source                = "./subnets"
-  environment           = "${var.environment}"
-  region                = "${var.aws_region}"
-  vpc_id                = "${module.vpc.main_vpc_id}"
-  public_route_table_id = "${module.vpc.public_route_table_id}"
-}
-
-module "security_groups" {
-  source      = "./security-groups"
-  environment = "${var.environment}"
-  vpc_id      = "${module.vpc.main_vpc_id}"
-}
-
-module "route53" {
-  source      = "./route53"
-  domain        = "${var.domain}"
-  environment   = "${var.environment}"
-  force_destroy = "${var.force_destroy_s3_buckets}"
-}
-
-module "s3" {
-  source        = "./s3"
-  domain        = "${var.domain}"
-  environment   = "${var.environment}"
-  force_destroy = "${var.force_destroy_s3_buckets}"
-}
-
+# Will only be used to access docks. Can we use kops created bastion?
 module "bastion" {
-  source        = "./bastion"
+  source        = "./modules/bastion"
   environment   = "${var.environment}"
   sg_id         = "${module.security_groups.bastion_sg_id}"
-  subnet_id     = "${module.subnets.main_subnet_id}"
-  key_name      = "${module.key_pair.key_pair_name}"
+  subnet_id     = "${module.subnets.main_subnet_id}" # TODO: Change
+  key_name      = "${module.key_pair.key_pair_name}" #TODO Change
 }
 
 module "instances" {
-  source                     = "./instances"
+  source                     = "./modules/instances"
   environment                = "${var.environment}"
-  main_host_subnet_id        = "${module.subnets.main_subnet_id}"
+  main_host_subnet_id        = "${module.subnets.main_subnet_id}" #TODO: Change
   dock_subnet_id             = "${module.subnets.dock_subnet_id}"
-  private_ip                 = "${var.main_host_private_ip}"
+  private_ip                 = "${var.main_host_private_ip}" # TODO: Change
   github_org_id              = "${var.github_org_id}"
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
-  key_name                   = "${module.key_pair.key_pair_name}"
-  main_host_instance_type    = "${var.main_host_instance_type}"
+  key_name                   = "${module.key_pair.key_pair_name}" #TODO: Change also remove key pair stuff
+  main_host_instance_type    = "${var.main_host_instance_type}" # TODO: CRemove not necesiary
   dock_instance_type         = "${var.dock_instance_type}"
-  main_sg_id                 = "${module.security_groups.main_sg_id}"
+  main_sg_id                 = "${module.security_groups.main_sg_id}" #TODO: Change
   dock_sg_id                 = "${module.security_groups.dock_sg_id}"
 }
 
 module "database" {
-  source            = "./database"
+  source            = "./modules/database"
   environment       = "${var.environment}"
   username          = "${var.db_username}"
   password          = "${var.db_password}"
   port              = "${var.db_port}"
-  subnet_group_name = "${module.subnets.database_subnet_group_name}"
+  subnet_group_name = "${module.subnets.database_subnet_group_name}" # TODO: Change group to also include other subnet
   security_group_id = "${module.security_groups.db_sg_id}"
   instance_class    = "${var.db_instance_class}"
 }

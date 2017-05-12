@@ -17,4 +17,4 @@ kops create cluster \
   --state=s3://${BUCKET_NAME} \
   --node-size=m4.large \
   --master-size=m4.large \
-  --out=kops-output --target=terraform
+  --out=./step-2-kops --target=terraform

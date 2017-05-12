@@ -9,3 +9,4 @@
 environments/*
 !environments/runnable-on-prem.example.tfvars
 
+step-2-kops
