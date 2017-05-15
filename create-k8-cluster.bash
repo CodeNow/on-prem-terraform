@@ -18,3 +18,6 @@ kops create cluster \
   --node-size=m4.large \
   --master-size=m4.large \
   --out=./step-2-kops --target=terraform
+
+# Move file in order for it to be a valid module
+mv ./step-2-kops/kubernetes.tf ./step-2-kops/main.tf

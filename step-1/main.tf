@@ -18,20 +18,6 @@ module "vpc" {
   environment   = "${var.environment}"
 }
 
-module "subnets" {
-  source                = "../modules/subnets"
-  environment           = "${var.environment}"
-  region                = "${var.aws_region}"
-  vpc_id                = "${module.vpc.main_vpc_id}"
-  public_route_table_id = "${module.vpc.public_route_table_id}"
-}
-
-module "security_groups" {
-  source      = "../modules/security-groups"
-  environment = "${var.environment}"
-  vpc_id      = "${module.vpc.main_vpc_id}"
-}
-
 module "route53" {
   source      = "../modules/route53"
   domain        = "${var.domain}"
@@ -44,4 +30,28 @@ module "s3" {
   domain        = "${var.domain}"
   environment   = "${var.environment}"
   force_destroy = "${var.force_destroy_s3_buckets}"
+}
+
+output "main_vpc_id" {
+  value = "${module.vpc.main_vpc_id}"
+}
+
+output "public_route_table_id" {
+  value = "${module.vpc.public_route_table_id}"
+}
+
+output "key_pair_name" {
+  value = "${module.key_pair.key_pair_name}"
+}
+
+output "dns_nameservers" {
+  value = "${module.route53.nameservers}"
+}
+
+output "cluster_name" {
+ value = "${module.route53.cluster_name}"
+}
+
+output "kops_config_bucket" { #TODO: Update
+ value = "${module.s3.kops_config_bucket}"
 }
