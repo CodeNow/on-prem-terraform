@@ -27,9 +27,10 @@ module "step_2_kops" {
 }
 
 module "security_groups" {
-  source      = "./modules/security-groups"
-  environment = "${var.environment}"
-  vpc_id      = "${module.step_1.main_vpc_id}"
+  source         = "./modules/security-groups"
+  environment    = "${var.environment}"
+  vpc_id         = "${module.step_1.main_vpc_id}"
+  cluster_sg_ids = "${concat(module.step_2_kops.node_security_group_ids, module.step_2_kops.master_security_group_ids)}"
 }
 
 module "subnets" {
