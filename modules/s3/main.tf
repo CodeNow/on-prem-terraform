@@ -94,7 +94,7 @@ resource "aws_s3_bucket" "kops_config" {
     Description = "Bucket to store kops configuration"
   }
 
-versioning {
+  versioning {
     enabled = true
   }
 }

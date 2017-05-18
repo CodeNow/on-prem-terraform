@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-REGION=$(terraform output -json | jq --raw-output '.aws_region.value')
-ENV=$(terraform output -json | jq --raw-output '.environment.value')
-VPC_ID=$(terraform output -json | jq --raw-output '.vpc_id.value')
-BUCKET_NAME=$(terraform output -json | jq --raw-output '.kops_config_bucket.value')
-CLUSTER_NAME=$(terraform output -json | jq --raw-output '.cluster_name.value')
-SSH_PUBLIC_KEY_PATH=$(terraform output -json | jq --raw-output '.ssh_public_key_path.value')
+# We need to run a refresh before we can run `terraform output`
+terraform refresh -var-file=$1
+
+JSON=$(terraform output -json)
+REGION=$(echo $JSON | jq --raw-output '.aws_region.value')
+ENV=$(echo $JSON | jq --raw-output '.environment.value')
+VPC_ID=$(echo $JSON | jq --raw-output '.vpc_id.value')
+BUCKET_NAME=$(echo $JSON | jq --raw-output '.kops_config_bucket.value')
+CLUSTER_NAME=$(echo $JSON | jq --raw-output '.cluster_name.value')
+SSH_PUBLIC_KEY_PATH=$(echo $JSON | jq --raw-output '.ssh_public_key_path.value')
 
 kops create cluster \
   --zones="${REGION}a" \
