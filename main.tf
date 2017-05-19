@@ -38,30 +38,26 @@ module "subnets" {
   environment           = "${var.environment}"
   region                = "${var.aws_region}"
   vpc_id                = "${module.step_1.main_vpc_id}"
-  public_route_table_id = "${module.step_1.public_route_table_id}"
+  cluster_subnet_id     = "${module.step_2_kops.node_subnet_ids[0]}" # Currently only handle one subnet for cluster
 }
 
 # Will only be used to access docks. Can we use kops created bastion?
 module "bastion" {
-  source        = "./modules/bastion"
-  environment   = "${var.environment}"
-  sg_id         = "${module.security_groups.bastion_sg_id}"
-  subnet_id     = "${module.subnets.main_subnet_id}" # TODO: Change
-  key_name      = "${module.step_1.key_pair_name}" #TODO Change
+  source      = "./modules/bastion"
+  environment = "${var.environment}"
+  sg_id       = "${module.security_groups.bastion_sg_id}"
+  subnet_id   = "${module.subnets.cluster_subnet_id}"
+  key_name    = "${module.step_1.key_pair_name}"
 }
 
 module "instances" {
   source                     = "./modules/instances"
   environment                = "${var.environment}"
-  main_host_subnet_id        = "${module.subnets.main_subnet_id}" #TODO: Change
   dock_subnet_id             = "${module.subnets.dock_subnet_id}"
-  private_ip                 = "${var.main_host_private_ip}" # TODO: Change
   github_org_id              = "${var.github_org_id}"
   lc_user_data_file_location = "${var.lc_user_data_file_location}"
-  key_name                   = "${module.step_1.key_pair_name}" #TODO: Change also remove key pair stuff
-  main_host_instance_type    = "${var.main_host_instance_type}" # TODO: CRemove not necesiary
+  key_name                   = "${module.step_1.key_pair_name}"
   dock_instance_type         = "${var.dock_instance_type}"
-  main_sg_id                 = "${module.security_groups.main_sg_id}" #TODO: Change
   dock_sg_id                 = "${module.security_groups.dock_sg_id}"
 }
 
@@ -71,7 +67,7 @@ module "database" {
   username          = "${var.db_username}"
   password          = "${var.db_password}"
   port              = "${var.db_port}"
-  subnet_group_name = "${module.subnets.database_subnet_group_name}" # TODO: Change group to also include other subnet
+  subnet_group_name = "${module.subnets.database_subnet_group_name}"
   security_group_id = "${module.security_groups.db_sg_id}"
   instance_class    = "${var.db_instance_class}"
 }
@@ -84,8 +80,8 @@ output "vpc_id" {
   value = "${module.step_1.main_vpc_id}"
 }
 
-output "main_host_subnet_id" {
-  value = "${module.subnets.main_subnet_id}"
+output "cluster_subnet_id" {
+  value = "${module.subnets.cluster_subnet_id}"
 }
 
 output "dock_subnet_id" {
@@ -130,4 +126,8 @@ output "cluster_name" {
 
 output "ssh_public_key_path" {
   value = "${var.public_key_path}"
+}
+
+output "kube_cluster_sg_ids" {
+  value = "${concat(module.step_2_kops.node_security_group_ids, module.step_2_kops.master_security_group_ids)}"
 }

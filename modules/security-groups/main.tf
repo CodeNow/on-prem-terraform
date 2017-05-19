@@ -113,6 +113,10 @@ output "db_sg_id" {
   value = "${aws_security_group.database_sg.id}"
 }
 
+output "cluster_sg_ids" {
+  value = "${var.cluster_sg_ids}"
+}
+
 output "dock_sg_id" {
   value = "${aws_security_group.dock_sg.id}"
 }

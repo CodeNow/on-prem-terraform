@@ -36,10 +36,6 @@ output "main_vpc_id" {
   value = "${module.vpc.main_vpc_id}"
 }
 
-output "public_route_table_id" {
-  value = "${module.vpc.public_route_table_id}"
-}
-
 output "key_pair_name" {
   value = "${module.key_pair.key_pair_name}"
 }
