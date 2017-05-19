@@ -3,9 +3,6 @@ variable public_key_path {}
 variable aws_region {}
 variable domain {}
 variable force_destroy_s3_buckets {}
-variable db_username {}
-variable db_password {}
-variable db_port {}
 
 module "key_pair" {
   source          = "../modules/keypair"

@@ -7,7 +7,7 @@ variable "aws_region" {
 }
 
 variable "environment" {
-  description = "Name given to the enviroment in which Runnable is being deployed. This can be any name. It is used in multiple places to name resources."
+  description = "Name given to the environment in which Runnable is being deployed. This can be any name. It is used in multiple places to name resources."
   default     = "runnable-on-prem"
   type        = "string"
 }
@@ -33,16 +33,6 @@ variable "force_destroy_s3_buckets" {
 }
 
 # Databases
-
-variable "db_username" {
-  description = "Username for RDS Postgres instance"
-  type        = "string"
-}
-
-variable "db_password" {
-  description = "Password for RDS Postgres instance"
-  type        = "string"
-}
 
 variable "db_port" {
   description = "Port for RDS Postgres instance"

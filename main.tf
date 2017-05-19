@@ -15,9 +15,6 @@ module "step_1" {
   aws_region               = "${var.aws_region}"
   domain                   = "${var.domain}"
   force_destroy_s3_buckets = "${var.force_destroy_s3_buckets}"
-  db_username              = "${var.db_username}"
-  db_password              = "${var.db_password}"
-  db_port                  = "${var.db_port}"
 }
 
 # Has unfortunate problem of not allowing variables
@@ -64,8 +61,6 @@ module "instances" {
 module "database" {
   source            = "./modules/database"
   environment       = "${var.environment}"
-  username          = "${var.db_username}"
-  password          = "${var.db_password}"
   port              = "${var.db_port}"
   subnet_group_name = "${module.subnets.database_subnet_group_name}"
   security_group_id = "${module.security_groups.db_sg_id}"
@@ -101,11 +96,12 @@ output "aws_region" {
 }
 
 output "postgres_user" {
-  value = "${var.db_username}"
+  value = "${module.database.username}"
 }
 
 output "postgres_password" {
-  value = "${var.db_password}"
+  value = "${module.database.password}"
+  sensitive = true
 }
 
 output "dns_nameservers" {
