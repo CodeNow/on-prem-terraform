@@ -17,3 +17,7 @@ resource "aws_instance" "bastion_instance" {
     Name = "${var.environment}-bastion"
   }
 }
+
+output "ip_address" {
+  value = "${aws_instance.bastion_instance.private_ip}"
+}

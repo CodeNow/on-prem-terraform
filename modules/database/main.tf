@@ -1,8 +1,7 @@
 variable "environment" {}
 variable "username" {
-  default = "pg-runnable"
+  default = "runnable"
 }
-variable "password" {}
 variable "port" {}
 variable "subnet_group_name" {}
 variable "security_group_id" {}
@@ -32,4 +31,8 @@ output "username" {
 
 output "password" {
   value = "${random_id.password.b64}"
+}
+
+output "host" {
+  value = "${aws_db_instance.main_postgres_db.address}"
 }

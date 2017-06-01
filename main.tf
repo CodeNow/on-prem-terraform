@@ -104,6 +104,11 @@ output "postgres_password" {
   sensitive = true
 }
 
+output "postgres_host" {
+  value = "${module.database.host}"
+  sensitive = true
+}
+
 output "dns_nameservers" {
   value = "${module.step_1.dns_nameservers}"
 }
@@ -122,6 +127,10 @@ output "cluster_name" {
 
 output "ssh_public_key_path" {
   value = "${var.public_key_path}"
+}
+
+output "bastion_ip_address" {
+  value = "${module.bastion.ip_address}"
 }
 
 output "kube_cluster_sg_ids" {
