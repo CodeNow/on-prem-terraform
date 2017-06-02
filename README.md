@@ -56,14 +56,14 @@ terraform apply -target=module.step_1.module.key_pair -target=module.step_1.modu
 
 ### Step 4: Update DNS
 
-Run `terraform output` and update the name servers for your domain. There should 4 entries. DNS nameservers need to be propagated before going on to the next step.
+Run  `terraform referesh -var-file="environments/main.tfvars"` and update the name servers for your domain. There should 4 entries. DNS nameservers need to be propagated before going on to the next step.
 
 ### Step 5: Create Kops configuration
 
 [kops]() is a tool to automatically spin up
 
 ```
-soucre create-k8-cluster-terraform.bash environments/main.tfvars
+source create-k8-cluster.bash environments/main.tfvars
 ```
 
 ### Step 6: Apply configuration
