@@ -145,7 +145,7 @@ resource "aws_launch_configuration" "dock_lc" {
   ebs_block_device {
     device_name = "/dev/sdb"
     snapshot_id = "snap-c77705e9"
-    volume_size = 50
+    volume_size = 250
   }
 
   lifecycle {
@@ -159,7 +159,7 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
   min_size                  = 2
   health_check_grace_period = 300
   health_check_type         = "EC2"
-  desired_capacity          = 2 # Start off with 0 and increase manually when main host is running
+  desired_capacity          = 4 # Start off with 0 and increase manually when main host is running
   vpc_zone_identifier       = ["${var.dock_subnet_id}"]
   launch_configuration      = "${aws_launch_configuration.dock_lc.name}"
 
