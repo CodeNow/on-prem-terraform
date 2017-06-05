@@ -178,6 +178,60 @@ resource "aws_autoscaling_group" "dock-auto-scaling-group" {
     value               = "${var.environment}"
     propagate_at_launch = true
   }
+
+  tag {
+    key                 = "role"
+    value               = "dock"
+    propagate_at_launch = true
+  }
+}
+
+# https://github.com/CodeNow/astral/blob/master/lib/shiva/tasks/asg.policy.scale-out.create.js#L49
+resource "aws_autoscaling_policy" "dock_scaling_policy" {
+  adjustment_type        = "ChangeInCapacity"
+  autoscaling_group_name = "${aws_autoscaling_group.dock-auto-scaling-group.name}"
+  name                   = "scale-out"
+  cooldown               = 600
+  policy_type            = "SimpleScaling"
+  scaling_adjustment     = 1
+}
+
+# https://github.com/CodeNow/astral/blob/master/lib/shiva/tasks/asg.policy.scale-out.create.js#L60
+resource "aws_cloudwatch_metric_alarm" "dock_alarm" {
+  alarm_name                = "${aws_autoscaling_group.dock-auto-scaling-group.name}-max-available-memory"
+  comparison_operator       = "LessThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Swarm Reserved Memory Maximum Available"
+  namespace                 = "Runnable/Swarm"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = "2.0"
+
+  dimensions {
+    AutoScalingGroupName = "${aws_autoscaling_group.dock-auto-scaling-group.name}"
+  }
+
+  alarm_actions     = ["${aws_autoscaling_policy.dock_scaling_policy.arn}"]
+}
+
+resource "aws_sns_topic" "asg_events" {
+  name = "asg-events-${var.environment}"
+}
+
+# https://github.com/CodeNow/astral/blob/master/lib/shiva/tasks/asg.policy.scale-out.create.js#L79
+resource "aws_autoscaling_notification" "dock_scaling_notification" {
+  group_names = [
+    "${aws_autoscaling_group.dock-auto-scaling-group.name}",
+  ]
+
+  notifications = [
+    "autoscaling:EC2_INSTANCE_LAUNCH",
+    "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+    "autoscaling:EC2_INSTANCE_TERMINATE",
+    "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
+  ]
+
+  topic_arn = "${aws_sns_topic.asg_events.arn}"
 }
 
 output "main_security_group_id" {
