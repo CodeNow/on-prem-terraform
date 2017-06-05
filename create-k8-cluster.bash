@@ -17,7 +17,7 @@ kops create cluster \
   --zones="${REGION}a" \
   --name=${CLUSTER_NAME} \
   --vpc=${VPC_ID} \
-  --node-count=4
+  --node-count=4 \
   --cloud=aws \
   --cloud-labels="Environment=${ENV}" \
   --ssh-public-key=${SSH_PUBLIC_KEY_PATH} \
