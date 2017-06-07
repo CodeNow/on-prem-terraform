@@ -214,26 +214,6 @@ resource "aws_cloudwatch_metric_alarm" "dock_alarm" {
   alarm_actions     = ["${aws_autoscaling_policy.dock_scaling_policy.arn}"]
 }
 
-resource "aws_sns_topic" "asg_events" {
-  name = "asg-events-${var.environment}"
-}
-
-# https://github.com/CodeNow/astral/blob/master/lib/shiva/tasks/asg.policy.scale-out.create.js#L79
-resource "aws_autoscaling_notification" "dock_scaling_notification" {
-  group_names = [
-    "${aws_autoscaling_group.dock-auto-scaling-group.name}",
-  ]
-
-  notifications = [
-    "autoscaling:EC2_INSTANCE_LAUNCH",
-    "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
-    "autoscaling:EC2_INSTANCE_TERMINATE",
-    "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
-  ]
-
-  topic_arn = "${aws_sns_topic.asg_events.arn}"
-}
-
 output "main_security_group_id" {
   value = "${aws_security_group.main_host_sg.id}"
 }
