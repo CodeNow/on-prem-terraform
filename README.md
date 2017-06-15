@@ -8,7 +8,7 @@ terraform plan
 terraform apply
 ```
 
-### Setting up Terraform
+### Initializing Terraform
 
 ```
 export AWS_ACCESS_KEY_ID=
