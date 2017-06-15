@@ -17,5 +17,5 @@ cp terraform.tfstate terraform.tfstate.bak # If there is a state file already
 aws s3api create-bucket --bucket $BUCKET_NAME --region us-west-2 --create-bucket-configuration LocationConstraint=us-west-2
 aws s3api put-bucket-versioning --bucket $BUCKET_NAME  --versioning-configuration Status=Enabled
 # Input "yes" for both questions ('Import from S3', 'Import from local state')
-terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=/$ENVIRONMENT" -backend-config="region=us-west-2" -backend=true
+terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=/tf-state-$ENVIRONMENT_NAME" -backend-config="region=us-west-2" -backend=true
 ```
