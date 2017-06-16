@@ -78,7 +78,7 @@ source create-k8-cluster.bash environments/main.tfvars
 
 ### Step 6: Apply configuration
 
-Finally, it's time to create the infrastructure, this include the kuberentes cluster, the auto scaling group for the dock workers, and the RDS database.
+Finally, it's time to create the infrastructure. This includes the kuberentes cluster, the auto scaling group for the dock workers, and the RDS database.
 
 If you with to review the resources to be created, first run `terraform plan -var-file="environments/main.tfvars"`.
 
