@@ -85,7 +85,7 @@ If you with to review the resources to be created, first run `terraform plan -va
 When you're ready to apply changes, just run
 
 ```
-terraform apply
+terraform apply -var-file="environments/main.tfvars"
 ```
 
 ### Step 7: Confirm Cluster is Up
