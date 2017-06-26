@@ -144,7 +144,7 @@ resource "aws_launch_configuration" "dock_lc" {
 
   ebs_block_device {
     device_name = "/dev/sdb"
-    snapshot_id = "snap-c77705e9"
+    snapshot_id = "snap-03e7095a37c71614d"
     volume_size = 250
   }
 
