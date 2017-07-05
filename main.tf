@@ -17,8 +17,6 @@ module "step_1" {
   force_destroy_s3_buckets = "${var.force_destroy_s3_buckets}"
 }
 
-# Has unfortunate problem of not allowing variables
-# Can variables be over
 module "step_2_kops" {
   source = "./step-2-kops/"
 }
@@ -38,7 +36,6 @@ module "subnets" {
   cluster_subnet_id     = "${module.step_2_kops.node_subnet_ids[0]}" # Currently only handle one subnet for cluster
 }
 
-# Will only be used to access docks. Can we use kops created bastion?
 module "bastion" {
   source      = "./modules/bastion"
   environment = "${var.environment}"

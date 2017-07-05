@@ -6,13 +6,17 @@
 brew install terraform kops jq kubectl
 ```
 
+[How to install homebrew](https://brew.sh/).
+
 ### Step 1: Obtaining AWS Access Tokens
 
 ```
 # TODO: Define permisisons
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
+
 ```
+[How to get access tokens](http://docs.aws.amazon.com/lambda/latest/dg/getting-started.html)
 
 ### Step 2: Populating Variables
 
@@ -25,19 +29,19 @@ The following are the only required variables:
 # Access to setting DNS nameservers is required.
 # Multiple subdomains must be set for this domain
 domain                     = "runnable.com"
-# A Github organization id (See below of obtainig ID)
+# A Github organization id (See below of obtaining ID)
 github_org_id              = "2828361" # Github ID for organization
 # Location of previously generationg configuation
 # Should be generated using github.com/CodeNow/on-prem-devops-scripts
 lc_user_data_file_location = "~/dock-runnable-on-prem.sh" # File must be already generated
-# Path to a publick key (See below of generating public key)
+# Path to a public key (See below of generating public key)
 public_key_path            = "~/.ssh/*.pub" # A public key
 ```
 
-##### Obtaining A Github ID
+##### Obtaining A Github ID}
 
 ```
-curl -sS "https://api.github.com/orgs/$ORGNAME" | jq '.id'
+curl -sS "https://api.github.com/orgs/${ORGNAME}" | jq '.id'
 ```
 
 ##### Obtaining A Public Key From Private Key
@@ -63,14 +67,14 @@ Run  `terraform referesh -var-file="environments/main.tfvars"` and update the na
 [kops]() is a tool to automatically spin up
 
 ```
-source create-k8-cluster.bash environments/main.tfvars
+bash create-k8-cluster.bash environments/main.tfvars
 ```
 
 ### Step 6: Apply configuration
 
-Finally, it's time to create the infrastructure. This include the kuberentes cluster, the auto scaling group for the dock workers, and the RDS database.
+Finally, it's time to create the infrastructure. This includes the kuberentes cluster, the auto scaling group for the dock workers, and the RDS database.
 
-If you with to review the resources to be created, first run `terraform plan -var-file="environments/main.tfvars"`.
+If you want to review the resources to be created, first run `terraform plan -var-file="environments/main.tfvars"`.
 
 When you're ready to apply changes, just run
 
@@ -81,7 +85,7 @@ terraform apply -var-file="environments/main.tfvars"
 
 ### Step 7: Confirm Cluster is Up
 
-After finishing the setup, you can now test if the cluster is up by running the following command.
+After finishing the setup, you can now test if the cluster is up by running the following command (This can take a few minutes).
 
 ```
 kubectl get nodes
