@@ -5,7 +5,7 @@ variable "cluster_subnet_id" {}
 
 resource "aws_eip" "dock_nat_eip" {
   vpc = true
-  depends_on = ["aws_internet_gateway.gw"]
+  depends_on = ["aws_internet_gateway.main"]
 }
 
 resource "aws_nat_gateway" "dock_nat" {
