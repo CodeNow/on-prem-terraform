@@ -45,7 +45,6 @@ resource "aws_autoscaling_group" "dock_auto_scaling_group" {
   min_size                  = 0
   health_check_grace_period = 300
   health_check_type         = "EC2"
-  desired_capacity          = 0 # Start off with 0 and increase manually when main host is running
   vpc_zone_identifier       = ["${var.dock_subnet_id}"]
   launch_configuration      = "${aws_launch_configuration.dock_lc.name}"
 
