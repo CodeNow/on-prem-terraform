@@ -1,7 +1,5 @@
 terraform {
-  backend "local" {
-    path = "kops.tfstate"
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
