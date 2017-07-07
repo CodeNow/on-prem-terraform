@@ -116,6 +116,10 @@ output "kops_config_bucket" {
  value = "${module.step_1.kops_config_bucket}"
 }
 
+output "dock_subnet_cidr" {
+  value = "${module.subnets.dock_subnet_cidr}"
+}
+
 output "cluster_name" {
  value = "${module.step_1.cluster_name}"
 }

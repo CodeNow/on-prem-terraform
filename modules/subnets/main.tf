@@ -37,6 +37,10 @@ output "dock_subnet_id" {
   value = "${aws_subnet.dock_subnet.id}"
 }
 
+output "dock_subnet_cidr" {
+  value = "${aws_subnet.dock_subnet.cidr_block}"
+}
+
 output "database_subnet_group_name" {
   value = "${aws_db_subnet_group.database_subnet_group.name}"
 }
