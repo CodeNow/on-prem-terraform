@@ -51,8 +51,9 @@ module "nat-gateway" {
 
 module "routing-tables" {
   source      = "./modules/routing-tables"
+  environment = "${var.environment}"
+  dock_nat_id = "${module.nat-gateway.dock_nat_gateway_id}"
   vpc_id      = "${module.step_1.main_vpc_id}"
-  dock_nat_id    = "${module.nat-gateway.dock_nat_gateway_id}"
 }
 
 module "instances" {

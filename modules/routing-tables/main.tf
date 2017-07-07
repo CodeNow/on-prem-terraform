@@ -1,11 +1,13 @@
 variable "vpc_id" {}
 variable "dock_nat_id" {}
+variable "environment" {}
 
 resource "aws_route_table" "docks_route_table" {
     vpc_id = "${var.vpc_id}"
- 
+
     tags {
         Name = "Docks route table"
+        Environment = "${var.environment}"
     }
 }
 

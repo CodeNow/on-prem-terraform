@@ -8,7 +8,7 @@ resource "aws_eip" "dock_nat_eip" {
 
 resource "aws_nat_gateway" "dock_nat" {
   allocation_id = "${aws_eip.dock_nat_eip.id}"
-  subnet_id = "${var.subnet_id}"
+  subnet_id     = "${var.subnet_id}"
 }
 
 output "dock_nat_eip" {
