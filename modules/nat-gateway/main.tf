@@ -1,23 +1,20 @@
 variable "environment" {}
 variable "vpc_id" {}
-variable "region" {}
-variable "cluster_subnet_id" {}
+variable "subnet_id" {}
 
 resource "aws_eip" "dock_nat_eip" {
   vpc = true
-  depends_on = ["aws_internet_gateway.main"]
 }
 
 resource "aws_nat_gateway" "dock_nat" {
   allocation_id = "${aws_eip.dock_nat_eip.id}"
-  subnet_id = "${var.cluster_subnet_id}"
-  depends_on = ["aws_internet_gateway.main"]
+  subnet_id = "${var.subnet_id}"
 }
 
 output "dock_nat_eip" {
   value = "${aws_eip.dock_nat_eip.public_ip}"
 }
 
-output "dock_nat_gateway" {
-  value = "${aws_nat_gateway.dock_nat}"
+output "dock_nat_gateway_id" {
+  value = "${aws_nat_gateway.dock_nat.id}"
 }

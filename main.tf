@@ -42,6 +42,19 @@ module "bastion" {
   key_name    = "${module.step_1.key_pair_name}"
 }
 
+module "nat-gateway" {
+  source      = "./modules/nat-gateway"
+  environment = "${var.environment}"
+  vpc_id      = "${module.step_1.main_vpc_id}"
+  subnet_id   = "${module.subnets.cluster_subnet_id}"
+}
+
+module "routing-tables" {
+  source      = "./modules/routing-tables"
+  vpc_id      = "${module.step_1.main_vpc_id}"
+  dock_nat_id    = "${module.nat-gateway.dock_nat_gateway_id}"
+}
+
 module "instances" {
   source                     = "./modules/instances"
   environment                = "${var.environment}"
