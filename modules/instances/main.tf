@@ -42,10 +42,9 @@ resource "aws_launch_configuration" "dock_lc" {
 resource "aws_autoscaling_group" "dock_auto_scaling_group" {
   name                      = "asg-${var.environment}-${var.github_org_id}"
   max_size                  = 30
-  min_size                  = 2
+  min_size                  = 0
   health_check_grace_period = 300
   health_check_type         = "EC2"
-  desired_capacity          = 2 # Start off with 0 and increase manually when main host is running
   vpc_zone_identifier       = ["${var.dock_subnet_id}"]
   launch_configuration      = "${aws_launch_configuration.dock_lc.name}"
 

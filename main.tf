@@ -1,7 +1,5 @@
 terraform {
-  backend "local" {
-    path = "kops.tfstate"
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
@@ -17,8 +15,6 @@ module "step_1" {
   force_destroy_s3_buckets = "${var.force_destroy_s3_buckets}"
 }
 
-# Has unfortunate problem of not allowing variables
-# Can variables be over
 module "step_2_kops" {
   source = "./step-2-kops/"
 }
@@ -38,13 +34,26 @@ module "subnets" {
   cluster_subnet_id     = "${module.step_2_kops.node_subnet_ids[0]}" # Currently only handle one subnet for cluster
 }
 
-# Will only be used to access docks. Can we use kops created bastion?
 module "bastion" {
   source      = "./modules/bastion"
   environment = "${var.environment}"
   sg_id       = "${module.security_groups.bastion_sg_id}"
   subnet_id   = "${module.subnets.cluster_subnet_id}"
   key_name    = "${module.step_1.key_pair_name}"
+}
+
+module "nat-gateway" {
+  source      = "./modules/nat-gateway"
+  environment = "${var.environment}"
+  vpc_id      = "${module.step_1.main_vpc_id}"
+  subnet_id   = "${module.subnets.cluster_subnet_id}"
+}
+
+module "routing-tables" {
+  source      = "./modules/routing-tables"
+  environment = "${var.environment}"
+  dock_nat_id = "${module.nat-gateway.dock_nat_gateway_id}"
+  vpc_id      = "${module.step_1.main_vpc_id}"
 }
 
 module "instances" {
@@ -119,6 +128,10 @@ output "main_host_private_ip" {
 
 output "kops_config_bucket" {
  value = "${module.step_1.kops_config_bucket}"
+}
+
+output "dock_subnet_cidr" {
+  value = "${module.subnets.dock_subnet_cidr}"
 }
 
 output "cluster_name" {
